@@ -5,7 +5,8 @@ const rootPath = path.resolve(__dirname,'../../..');
 module.exports = router => {
   router.post('/upload', async (ctx) => {
     ctx.validateBody('data').required('Invalid/Missing Data').isString('Invalid/Missing Data');
-    ctx.validateBody('filepath').required('Invalid/Missing Filepath').isString('Invalid/Missing Filepath');
+    ctx.validateBody('filepath').required('Invalid/Missing Filepath').isString('Invalid/Missing Filepath')
+      .tap(f => path.normalize(`/${f.replace(/(\.){2,}(\/)/g,'')}`));
       
     const datauri = belt.ensureFile(ctx.vals.data);
     ctx.check(datauri,'Invalid/Missing File');
