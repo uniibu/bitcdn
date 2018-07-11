@@ -18,6 +18,6 @@ module.exports = router => {
     ctx.check(filePath,`Invalid/Missing File Extension, expected ${datauri.ext}`);
     const saveFile = await belt.saveFile(dataBuffer,path.join(rootPath,ctx.state.userinfo.dir),ctx.vals.filepath);
     ctx.check(saveFile, 'Invalid/Missing File');
-    ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}/${ctx.vals.filepath}`);
+    ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}${ctx.vals.filepath}`);
   });
 };
