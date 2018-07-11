@@ -8,17 +8,14 @@ module.exports = router => {
     ctx.validateBody('filepath').required('Invalid/Missing Filepath').isString('Invalid/Missing Filepath');
       
     const datauri = belt.ensureFile(ctx.vals.data);
-    console.log(datauri);
     ctx.check(datauri,'Invalid/Missing File');
     const dataBuffer = belt.uriToBuffer(datauri.base64);
-    console.log(dataBuffer);
     ctx.check(dataBuffer, 'Invalid/Missing File');
     const checkSize =  belt.validateBuffer(dataBuffer, 1024);
     ctx.check(checkSize, 'File size exceeded 1040 kb');
     const filePath = belt.ensureFilePath(datauri.ext,ctx.vals.filepath);
     ctx.check(filePath,`Invalid/Missing File Extension, expected ${datauri.ext}`);
     const saveFile = await belt.saveFile(dataBuffer,path.join(rootPath,ctx.state.userinfo.dir),ctx.vals.filepath);
-    
     ctx.check(saveFile, 'Invalid/Missing File');
     ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}/${ctx.vals.filepath}`);
   });
