@@ -7,17 +7,13 @@ module.exports = router => {
     ctx.validateBody('data').required('Invalid/Missing Data').isString('Invalid/Missing Data');
     ctx.validateBody('filepath').required('Invalid/Missing Filepath').isString('Invalid/Missing Filepath')
       .tap(f => path.normalize(`/${f.replace(/(\.){2,}(\/)/g,'')}`));
-      
-    const datauri = belt.ensureFile(ctx.vals.data);
-    ctx.check(datauri,'Invalid/Missing File');
-    const dataBuffer = belt.uriToBuffer(datauri.base64);
-    ctx.check(dataBuffer, 'Invalid/Missing File');
-    const checkSize =  belt.validateBuffer(dataBuffer, 1024);
-    ctx.check(checkSize, 'File size exceeded 1040 kb');
-    const filePath = belt.ensureFilePath(datauri.ext,ctx.vals.filepath);
-    ctx.check(filePath,`Invalid/Missing File Extension, expected ${datauri.ext}`);
-    const saveFile = await belt.saveFile(dataBuffer,path.join(rootPath,ctx.state.userinfo.dir),ctx.vals.filepath);
-    ctx.check(saveFile, 'Invalid/Missing File');
-    ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}${ctx.vals.filepath}`);
+    ctx.validateQuery('convert').optional().isIn(['jpg','jpeg','png','webp'],'Allowed convert parameters jpg,jpeg,png,webp');
+    try{
+      const valid = await belt.validateFile(ctx.vals.data, path.join(rootPath,ctx.state.userinfo.dir), ctx.vals.filepath,1024,ctx.vals.convert);
+      ctx.check(valid,'Invalid/Missing File');
+      ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid}`);
+    }catch(e){
+      ctx.fail(e.message);
+    }    
   });
 };
