@@ -58,9 +58,9 @@ exports.validateFile = async (dataUri, dir, filepath, maxSize=1024,convert=false
     throw new Error('Invalid data');
   }
   const fileExt = allowed[fileType[1]].ext;
-  if(path.extname(filepath) !== fileExt){
-    console.error(path.extname(filepath),fileExt);
-    throw new Error(`Invalid/Missing File Extension, expected ${fileExt}`);
+  const filepathExt = path.extname(filepath);
+  if(filepathExt !== fileExt){
+    filepath = formatPath('ext',filepath,fileExt);    
   }
   const base64Buff = Buffer.from(base64Data, 'base64');
   if(!base64Buff){
