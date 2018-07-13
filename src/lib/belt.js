@@ -93,6 +93,7 @@ const validateFile = exports.validateFile = async (dataUri, dir, filepath, maxSi
     }
     return path.join(path.dirname(filepath),path.basename(relativePath));
   }catch(e){
+    console.log(e.message);
     throw new Error('Error occured while saving your file');
   }
 };
@@ -110,6 +111,7 @@ exports.processFetchUrl = async (imageUrl,dir,convert=false) => {
     const filepath = `/gallery/${generateRand(5)}`;  
     return await validateFile(dataUri, dir, filepath,1024,convert); 
   }catch(e){
+    console.log(e.message);
     throw new Error('Error fetching url, must be a valid image file');
   }
 };
