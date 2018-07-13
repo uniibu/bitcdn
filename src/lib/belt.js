@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const sharp = require('sharp');
 const crypto = require('crypto');
+const needle = require('needle');
 
 const allowedFiles = {
   image: {'png':{ext:'.png'},'jpeg':{ext:'.jpeg'},'jpg':{ext:'.jpg'},'gif':{ext:'.gif'},'x-icon':{ext:'.ico'},'svg+xml':{ext:'.svg'},'tiff':{ext:'.tiff'}, 'webp':{ext:'.webp'}},
@@ -11,7 +12,7 @@ const allowedFiles = {
 const sharpOpts = {
   jpeg: {quality:70},
   png: {progressive: false},
-  webp:{lossless: true }
+  webp:{quality:70,lossless: true }
 };
 
 function isBase64 (str) {
@@ -45,7 +46,7 @@ function formatPath(type, fpath, data){
   }
 }
 
-exports.validateFile = async (dataUri, dir, filepath, maxSize=1024,convert=false) => {
+const validateFile = exports.validateFile = async (dataUri, dir, filepath, maxSize=1024,convert=false) => {
   const parts = dataUri.split(',');
   if (parts.length < 2 || parts.length > 2) {
     throw new Error('Invalid data');
@@ -78,21 +79,37 @@ exports.validateFile = async (dataUri, dir, filepath, maxSize=1024,convert=false
     }
     if(fileType[0] == 'image' && ['.jpg','.jpeg','.png','.webp'].includes(fileExt)){
       let sharpImg = sharp(base64Buff);
+      convert = convert || fileType[1];
       if(convert){
         convert = convert == 'jpg' ? 'jpeg':convert;
         relativePath = formatPath('ext',relativePath,`.${convert}`);
         sharpImg = sharpImg[convert](sharpOpts[convert]);
       }
-
+   
       await fs.ensureDir(path.dirname(relativePath));
       await sharpImg.toFile(relativePath);        
     }else{
-      console.log('here');
       await fs.outputFile(relativePath,base64Buff);
     }
     return path.join(path.dirname(filepath),path.basename(relativePath));
   }catch(e){
-    console.log(e);
     throw new Error('Error occured while saving your file');
+  }
+};
+
+exports.processFetchUrl = async (imageUrl,dir,convert=false) => {
+  try{
+    const resp = await needle('get',imageUrl);
+    const sharpImg = sharp(resp.body);
+    const {format} = await sharpImg.metadata();
+    if (!['png','jpeg','jpg','webp'].includes(format)) {
+      return false;
+    }
+    const buff = await sharpImg.toBuffer();
+    const dataUri = `data:image/${format};base64,${buff.toString('base64')}`;
+    const filepath = `/gallery/${generateRand(5)}`;  
+    return await validateFile(dataUri, dir, filepath,1024,convert); 
+  }catch(e){
+    throw new Error('Error fetching url, must be a valid image file');
   }
 };

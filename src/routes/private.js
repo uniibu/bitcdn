@@ -16,4 +16,15 @@ module.exports = router => {
       ctx.fail(e.message);
     }    
   });
+  router.post('/uploadurl',async ctx => {
+    ctx.validateBody('url').required('Invalid/Missing Url').isString('Invalid/Missing Url');
+    ctx.validateQuery('convert').optional().isIn(['jpg','jpeg','png','webp'],'Allowed convert parameters jpg,jpeg,png,webp');
+    try{
+      const valid = await belt.processFetchUrl(ctx.vals.url,path.join(rootPath,ctx.state.userinfo.dir),ctx.vals.convert);
+      ctx.check(valid,'Invalid/Missing File');
+      ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid}`);
+    }catch(e){
+      ctx.fail(e.message);
+    }
+  });
 };

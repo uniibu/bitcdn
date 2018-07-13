@@ -22,8 +22,8 @@ app.use(
   require('koa-bodyparser')({
     extendTypes: { json: ['text/plain'] },
     enableTypes: ['json'],
-    onerror (err, ctx) {
-      console.error(err.stack || err.message);
+    onerror({ message}, ctx) {
+      console.error(message);
       ctx.throw(422, { error: 'Error parsing request' });
     }
   })
@@ -34,8 +34,8 @@ app.use(lib.middleware());
 app.use(lib.catchError());
 app.use(lib.jsonRespond());
 app.use(require('./routes').routes());
-app.on('error', (err, ctx) => {
-  console.error(err, ctx);
+app.on('error', (err) => {
+  console.error(err);
 });
 app.use((ctx) => {
   ctx.notFound('Endpoint not found');
