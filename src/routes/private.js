@@ -19,7 +19,7 @@ module.exports = router => {
       if (ctx.vals.optimized && Array.isArray(valid)) {
         ctx.ok({
           original: `https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid[0]}`,
-          optmized: `https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid[1]}`
+          optimized: `https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid[1]}`
         });
       } else {
         ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid}`);
@@ -41,7 +41,7 @@ module.exports = router => {
       if (ctx.vals.optimized && Array.isArray(valid)) {
         ctx.ok({
           original: `https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid[0]}`,
-          optmized: `https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid[1]}`
+          optimized: `https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid[1]}`
         });
       } else {
         ctx.ok(`https://${ctx.state.userinfo.suburl}.${config.APIURL}${valid}`);
