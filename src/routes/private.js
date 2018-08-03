@@ -6,7 +6,8 @@ const fs = require('fs-extra');
 module.exports = router => {
   router.post('/deleteimage', async (ctx) => {
     ctx.validateBody('filename').required('Invalid/Missing Filename').isString(
-      'Invalid/Missing Filename');
+      'Invalid/Missing Filename').tap(f => path.normalize(
+      `/${f.replace(/(\.){2,}(\/)/g, '')}`));
     const uinfoDir = ctx.state.userinfo.dir;
     const subUrl = `https://${ctx.state.userinfo.suburl}.bitcdn.host/${ctx.vals.filename}`;
     const fileUrls = [];
