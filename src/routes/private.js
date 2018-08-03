@@ -37,7 +37,7 @@ module.exports = router => {
     try {
       const uinfoDir = ctx.state.userinfo.dir;
       const valid = await belt.validateFile(ctx.vals.data, path.join(rootPath, uinfoDir),
-        ctx.vals.filepath, 1024, ctx.vals.convert, ctx.vals.optimized);
+        ctx.vals.filepath, config.LIMIT, ctx.vals.convert, ctx.vals.optimized);
       ctx.check(valid, 'Invalid/Missing File');
       if (ctx.vals.optimized && Array.isArray(valid)) {
         ctx.ok({

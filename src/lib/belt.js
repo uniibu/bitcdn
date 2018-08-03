@@ -48,7 +48,7 @@ function formatPath(type, fpath, data) {
     });
   }
 }
-const validateFile = async (dataUri, dir, filepath, maxSize = 1024, convert = false, optimized) => {
+const validateFile = async (dataUri, dir, filepath, maxSize, convert = false, optimized) => {
   const parts = dataUri.split(',');
   if (parts.length < 2 || parts.length > 2) {
     throw new Error('Invalid data');
@@ -71,7 +71,7 @@ const validateFile = async (dataUri, dir, filepath, maxSize = 1024, convert = fa
   }
   const inKb = Buffer.byteLength(base64Buff) / 1024;
   if (inKb > maxSize) {
-    throw new Error('File size exceeded 1024 kb');
+    throw new Error(`File size exceeded ${maxSize}kb`);
   }
   try {
     let relativePath = path.join(dir, filepath);
@@ -117,10 +117,10 @@ exports.processFetchUrl = async (imageUrl, dir, convert = false, optimized) => {
     const buff = await sharpImg.toBuffer();
     const dataUri = `data:image/${format};base64,${buff.toString('base64')}`;
     const filepath = `/gallery/${generateRand(5)}`;
-    return await validateFile(dataUri, dir, filepath, 1024, convert, optimized);
+    return await validateFile(dataUri, dir, filepath, config.LIMIT, convert, optimized);
   } catch (e) {
     console.log(e.message);
-    throw new Error('Error fetching url, must be a valid image file');
+    throw new Error(`Error fetching url, ${e.message}`);
   }
 };
 exports.clearCfCache = async urlArr => {
