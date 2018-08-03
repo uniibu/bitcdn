@@ -47,8 +47,7 @@ function formatPath(type, fpath, data) {
     });
   }
 }
-const validateFile = exports.validateFile = async (dataUri, dir, filepath, maxSize = 1024, convert =
-false, optimized) => {
+const validateFile = async (dataUri, dir, filepath, maxSize = 1024, convert = false, optimized) => {
   const parts = dataUri.split(',');
   if (parts.length < 2 || parts.length > 2) {
     throw new Error('Invalid data');
@@ -105,6 +104,7 @@ false, optimized) => {
     throw new Error('Error occured while saving your file');
   }
 };
+exports.validateFile = validateFile;
 exports.processFetchUrl = async (imageUrl, dir, convert = false, optimized) => {
   try {
     const resp = await needle('get', imageUrl);
