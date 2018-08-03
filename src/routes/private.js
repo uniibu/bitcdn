@@ -9,7 +9,7 @@ module.exports = router => {
       'Invalid/Missing Filename').tap(f => path.normalize(
       `/${f.replace(/(\.)+(\/)?/g, '')}`));
     const uinfoDir = ctx.state.userinfo.dir;
-    const subUrl = `https://${ctx.state.userinfo.suburl}.bitcdn.host/${ctx.vals.filename}`;
+    const subUrl = `https://${ctx.state.userinfo.suburl}.bitcdn.host${ctx.vals.filename}`;
     const fileUrls = [];
     const files = ['.jpg', '.jpeg', '.png', '.webp'].map(ext => {
       fileUrls.push(subUrl + ext);
