@@ -8,12 +8,18 @@ module.exports = router => {
     ctx.validateBody('filename').required('Invalid/Missing Filename').isString(
       'Invalid/Missing Filename');
     const uinfoDir = ctx.state.userinfo.dir;
-    const files = ['.jpg', '.jpeg', '.png', '.webp'].map(ext => path.join(rootPath, uinfoDir,
-      'gallery', ctx.vals.filename + ext));
+    const subUrl = `https://${ctx.state.userinfo.suburl}.bitcdn.host/${ctx.vals.filename}`;
+    const fileUrls = [];
+    const files = ['.jpg', '.jpeg', '.png', '.webp'].map(ext => {
+      fileUrls.push(subUrl + ext);
+      return path.join(rootPath, uinfoDir, ctx.vals.filename + ext);
+    });
     try {
       for (const f of files) {
         await fs.remove(f);
       }
+      const resp = await belt.clearCfCache(fileUrls);
+      ctx.check(resp.success == true, 'Failed clearing cache');
       ctx.ok();
     } catch (e) {
       ctx.fail(e.message);

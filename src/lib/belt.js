@@ -3,6 +3,7 @@ const path = require('path');
 const sharp = require('sharp');
 const crypto = require('crypto');
 const needle = require('needle');
+const config = require('../config');
 const allowedFiles = {
   image: { 'png': { ext: '.png' }, 'jpeg': { ext: '.jpeg' }, 'jpg': { ext: '.jpg' }, 'gif': { ext: '.gif' }, 'x-icon': { ext: '.ico' }, 'svg+xml': { ext: '.svg' }, 'tiff': { ext: '.tiff' }, 'webp': { ext: '.webp' } },
   application: { 'javascript': { ext: '.js' }, 'json': { ext: '.json' }, 'xml': { ext: '.xml' } },
@@ -120,5 +121,26 @@ exports.processFetchUrl = async (imageUrl, dir, convert = false, optimized) => {
   } catch (e) {
     console.log(e.message);
     throw new Error('Error fetching url, must be a valid image file');
+  }
+};
+exports.clearCfCache = async urlArr => {
+  const options = {
+    headers: {
+      'X-Auth-Email': config.CF.email,
+      'X-Auth-Key': config.CF.key
+    },
+    json: true
+  };
+  const bodyData = { files: urlArr };
+  try {
+    const resp = await needle('post',
+      `https://api.cloudflare.com/client/v4/zones/${config.CF.zone}/purge_cache`, bodyData,
+      options);
+    if (resp.statusCode == 200) {
+      return resp.body;
+    }
+  } catch (e) {
+    console.error(e.message);
+    return { success: false };
   }
 };
