@@ -9,7 +9,7 @@ module.exports = router => {
       'Invalid/Missing Filename');
     const uinfoDir = ctx.state.userinfo.dir;
     const files = ['.jpg', '.jpeg', '.png', '.webp'].map(ext => path.join(rootPath, uinfoDir,
-      ctx.vals.filename + ext));
+      'gallery', ctx.vals.filename + ext));
     try {
       for (const f of files) {
         await fs.remove(f);
