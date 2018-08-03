@@ -2,7 +2,23 @@ const belt = require('../lib/belt');
 const config = require('../config');
 const path = require('path');
 const rootPath = path.resolve(__dirname, '../../..');
+const fs = require('fs-extra');
 module.exports = router => {
+  router.post('/deleteimage', async (ctx) => {
+    ctx.validateBody('filename').required('Invalid/Missing Filename').isString(
+      'Invalid/Missing Filename');
+    const uinfoDir = ctx.state.userinfo.dir;
+    const files = ['.jpg', '.jpeg', '.png', '.webp'].map(ext => path.join(rootPath, uinfoDir,
+      ctx.vals.filename + ext));
+    try {
+      for (const f of files) {
+        await fs.remove(f);
+      }
+      ctx.ok();
+    } catch (e) {
+      ctx.fail(e.message);
+    }
+  });
   router.post('/upload', async (ctx) => {
     ctx.validateBody('data').required('Invalid/Missing Data').isString('Invalid/Missing Data');
     ctx.validateBody('filepath').required('Invalid/Missing Filepath').isString(
