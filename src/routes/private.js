@@ -7,7 +7,7 @@ module.exports = router => {
   router.post('/deleteimage', async (ctx) => {
     ctx.validateBody('filename').required('Invalid/Missing Filename').isString(
       'Invalid/Missing Filename').tap(f => path.normalize(
-      `/${f.replace(/(\.){2,}(\/)/g, '')}`));
+      `/${f.replace(/(\.)+(\/)?/g, '')}`));
     const uinfoDir = ctx.state.userinfo.dir;
     const subUrl = `https://${ctx.state.userinfo.suburl}.bitcdn.host/${ctx.vals.filename}`;
     const fileUrls = [];
@@ -30,7 +30,7 @@ module.exports = router => {
     ctx.validateBody('data').required('Invalid/Missing Data').isString('Invalid/Missing Data');
     ctx.validateBody('filepath').required('Invalid/Missing Filepath').isString(
       'Invalid/Missing Filepath')
-      .tap(f => path.normalize(`/${f.replace(/(\.){2,}(\/)/g, '')}`));
+      .tap(f => path.normalize(`/${f.replace(/(\.)+(\/)?/g, '')}`));
     ctx.validateQuery('convert').optional().isIn(['jpg', 'jpeg', 'png', 'webp'],
       'Allowed convert parameters jpg,jpeg,png,webp');
     ctx.validateQuery('optimized').optional().isString('Invalid Query');
@@ -51,7 +51,7 @@ module.exports = router => {
       ctx.fail(e.message);
     }
   });
-  router.post('/uploadurl', async ctx => {
+  router.post('/uploadimageurl', async ctx => {
     ctx.validateBody('url').required('Invalid/Missing Url').isString('Invalid/Missing Url');
     ctx.validateQuery('convert').optional().isIn(['jpg', 'jpeg', 'png', 'webp'],
       'Allowed convert parameters jpg,jpeg,png,webp');
