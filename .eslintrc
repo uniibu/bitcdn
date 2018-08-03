@@ -48,13 +48,6 @@
       "error",
       "never"
     ],
-    "prefer-destructuring": [
-      "error",
-      {
-        "object": true,
-        "array": true
-      }
-    ],
     "switch-colon-spacing": "error",
     "key-spacing": "error",
     "comma-spacing": "error",
