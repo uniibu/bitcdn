@@ -30,7 +30,7 @@
     "dotenv": "^6.0.0",
     "envalid": "^4.1.4",
     "fs-extra": "^7.0.0",
-    "koa": "^2.5.1",
+    "koa": "^2.12.1",
     "koa-bodyparser": "^4.2.1",
     "koa-bouncer": "^6.0.4",
     "koa-helmet": "^4.0.0",
