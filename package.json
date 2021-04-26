@@ -33,7 +33,7 @@
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
     "koa-bouncer": "^6.0.4",
-    "koa-helmet": "^4.0.0",
+    "koa-helmet": "^6.0.0",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "needle": "^2.2.1",
