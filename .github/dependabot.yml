@@ -1,0 +1,26 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: sharp
+    versions:
+    - 0.27.1
+    - 0.27.2
+    - 0.28.0
+  - dependency-name: envalid
+    versions:
+    - 6.0.2
+    - 7.0.0
+  - dependency-name: urijs
+    versions:
+    - 1.19.5
+  - dependency-name: koa-helmet
+    versions:
+    - 6.0.0
+  - dependency-name: lodash
+    versions:
+    - 4.17.20
