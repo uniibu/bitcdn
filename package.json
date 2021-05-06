@@ -27,7 +27,7 @@
   "homepage": "https://github.com/uniibu/bitcdn#readme",
   "dependencies": {
     "@koa/cors": "^2.2.1",
-    "dotenv": "^6.0.0",
+    "dotenv": "^9.0.0",
     "envalid": "^4.1.4",
     "fs-extra": "^7.0.0",
     "koa": "^2.5.1",
