@@ -36,7 +36,7 @@
     "koa-helmet": "^4.0.0",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
-    "needle": "^2.2.1",
+    "needle": "^3.0.0",
     "sharp": "^0.21.0"
   },
   "devDependencies": {
