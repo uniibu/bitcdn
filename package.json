@@ -37,7 +37,7 @@
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "needle": "^2.2.1",
-    "sharp": "^0.21.0"
+    "sharp": "^0.32.6"
   },
   "devDependencies": {
     "nodevl": "^1.0.2"
